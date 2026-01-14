@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QR Generator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: Inter, sans-serif;
+}
+
+.container {
+    width: 420px;
+    padding: 35px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #0f0f0f, #050505);
+    box-shadow: 0 0 60px rgba(0,255,255,0.15);
+    text-align: center;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #111;
+    color: white;
+}
+
+input[type="color"] {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+}
+
+button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    background: linear-gradient(90deg, #00f5ff, #00ffa2);
+}
+
+.qr-box {
+    margin-top: 20px;
+    background: white;
+    padding: 12px;
+    border-radius: 14px;
+    display: none;
+}
+
+.qr-box img {
+    width: 180px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.actions button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #333;
+    cursor: pointer;
+}
+.actions button:hover {
+    background: #222;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>QR CODE </h2>
+    <p style="opacity:.6">GENERATOR</p>
+
+    <div class="form-row">
+        <input id="url" type="text" placeholder="Paste your link">
+        <input id="color" type="color" value="#000000">
+    </div>
+
+    <button onclick="generate(true)">Generate</button>
+
+    <div class="qr-box" id="qrBox">
+        <img id="qrImg">
+    </div>
+
+    <div class="actions">
+    <button onclick="generate(false)">Remove Logo</button>
+    <button onclick="downloadQR()">Download</button>
+</div>
+
+<script>
+async function generate(useLogo) {
+    const url = document.getElementById("url").value;
+    const color = document.getElementById("color").value;
+
+    if (!url) return;
+
+    const res = await fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, color, logo: useLogo })
+    });
+
+    const data = await res.json();
+    document.getElementById("qrImg").src = "data:image/png;base64," + data.image;
+    document.getElementById("qrBox").style.display = "inline-block";
+}
+function downloadQR() {
+    const img = document.getElementById("qrImg");
+    if (!img.src) return;
+
+    const link = document.createElement("a");
+    link.href = img.src;
+    link.download = "qr-code.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
+
+</body>
+</html>
