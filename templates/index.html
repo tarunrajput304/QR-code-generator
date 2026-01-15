@@ -2,11 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QR Generator</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
+/* MOBILE ONLY FIX — PC VIEW UNCHANGED */
+@media (max-width: 768px) {
+    body {
+        zoom: 1.25;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        transform: scale(1.05);
+    }
+}
+
 body {
     margin: 0;
     height: 100vh;
