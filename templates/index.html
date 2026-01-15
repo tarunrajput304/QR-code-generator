@@ -94,19 +94,20 @@ button {
     background: #222;
 }
 
-/* MOBILE ONLY FIX — PC VIEW UNCHANGED */
 @media (max-width: 768px) {
     body {
-        align-items: flex-start;
-        padding-top: 30px
+        display: block;      /* disable flex */
+        height: auto;        /* remove 100vh */
+        padding: 20px 0;
     }
 
     .container {
-        width: 92vw;
+        width: 94vw;
         max-width: 420px;
-        margin : 0 auto;
+        margin: 0 auto;
     }
 }
+
 </style>
 </head>
 
